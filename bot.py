@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import asyncio
 
+
 def get_bot():
     bot = commands.Bot(command_prefix="example.")
 
@@ -12,7 +13,11 @@ def get_bot():
 
     async def _worker(ctx, port):
         async with aiohttp.ClientSession() as sess:
-            await sess.post(f"http://localhost:{port}/restart",     headers={"Authorization": f"Bot {bot.http.token}"}, params={"channel": ctx.channel.id, "message": ctx.message.id})
+            await sess.post(
+                f"http://localhost:{port}/restart",
+                headers={"Authorization": f"Bot {bot.http.token}"},
+                params={"channel": ctx.channel.id, "message": ctx.message.id},
+            )
 
     @bot.command()
     @commands.is_owner()
@@ -21,4 +26,5 @@ def get_bot():
         with open("port") as f:
             port = f.read()
         asyncio.create_task(_worker(ctx, port))
+
     return bot
